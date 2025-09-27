@@ -12,7 +12,7 @@
 		try {
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			//Añadido
-			window.addEventListener("onEmbeddedMessagingReady", () => {            
+			/*window.addEventListener("onEmbeddedMessagingReady", () => {            
 			console.log( "Inside Prechat API!!" );
 			window.addEventListener("onEmbeddedMessagingReady", e => {
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
@@ -22,7 +22,10 @@
 			    }
 			  });
 			});
-			});
+			});*/
+			embeddedservice_bootstrap.autoResponseAPI.setAutoResponseParameters({
+			    language: "Spanish",
+			  });
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
