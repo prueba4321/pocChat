@@ -11,6 +11,27 @@
 	function initEmbeddedMessaging() {
 		try {
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+			//Añadido
+			window.addEventListener("onEmbeddedMessagingReady", () => {            
+			console.log( "Inside Prechat API!!" );
+			window.addEventListener("onEmbeddedMessagingReady", e => {
+			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+			   "_firstName": {
+			      "value": "Jane",
+			      "isEditableByEndUser": false
+			    },
+			    "dropdown_prechat": {
+			      "value": "A2",
+			      "isEditableByEndUser": false
+			    },
+			    "language": {
+			      "value": "Spanish",
+			      "isEditableByEndUser": false
+			    }
+			  });
+			});
+			});
+			//Fin de añadido
 
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
