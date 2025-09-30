@@ -25,7 +25,7 @@
 			});*/
 			window.addEventListener("onEmbeddedMessagingReady", () => {
 			  console.log("Received the onEmbeddedMessagingReady event…");
-			  embeddedservice_bootstrap.autoResponseAPI.setHiddenPrechatFields({
+			  embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
 			    language: "Spanish"
 			  });
 			});
