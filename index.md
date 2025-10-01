@@ -10,21 +10,9 @@
 <script type='text/javascript'>
 	function initEmbeddedMessaging() {
 		try {
-			//embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
-			//Añadido
-			/*window.addEventListener("onEmbeddedMessagingReady", () => {            
-			console.log( "Inside Prechat API!!" );
-			window.addEventListener("onEmbeddedMessagingReady", e => {
-			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-			    "language": {
-			      "value": "Spanish",
-			      "isEditableByEndUser": false
-			    }
-			  });
-			});
-			});*/
+			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			window.addEventListener("onEmbeddedMessagingReady", () => {
-			  console.log("Received the onEmbeddedMessagingReady event…");
+			 console.log("Received the onEmbeddedMessagingReady event…");
 			  embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
 			    "language": "Spanish",
 				"idPreChat":"aAkfZ000003eI9nSAE"
@@ -45,6 +33,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 1</h1>
+  <h1>Hola Mundo 2</h1>
 </body>
 </html>
