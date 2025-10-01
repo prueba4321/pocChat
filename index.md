@@ -10,7 +10,7 @@
 <script type='text/javascript'>
 	function initEmbeddedMessaging() {
 		try {
-			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+			//embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			//Añadido
 			/*window.addEventListener("onEmbeddedMessagingReady", () => {            
 			console.log( "Inside Prechat API!!" );
