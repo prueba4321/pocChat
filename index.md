@@ -33,7 +33,7 @@
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
 				'ML_Chat_Area_Privada',
-				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
+				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632?language=Spanish',
 				{
 					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
 				}
@@ -44,6 +44,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 5</h1>
+  <h1>Hola Mundo 6</h1>
 </body>
 </html>
