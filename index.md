@@ -23,13 +23,13 @@
 			  });
 			});
 			});*/
-			window.embedded_svc.settings = {
+			window.addEventListener("onEmbeddedMessagingReady", () => {
+			  console.log("Received the onEmbeddedMessagingReady event…");
+				window.embedded_svc.settings = {
 		        // otros settings
 		        idPreChat: "aAkfZ000003eI9nSAE", 
 		        //lan: "12345678X"
 		    };
-			window.addEventListener("onEmbeddedMessagingReady", () => {
-			  console.log("Received the onEmbeddedMessagingReady event…");
 			  embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
 			    language: "Spanish"
 			  });
@@ -49,6 +49,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 6</h1>
+  <h1>Hola Mundo 7</h1>
 </body>
 </html>
