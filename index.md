@@ -23,6 +23,11 @@
 			  });
 			});
 			});*/
+			window.embedded_svc.settings = {
+		        // otros settings
+		        idPreChat: "aAkfZ000003eI9nSAE", 
+		        //lan: "12345678X"
+		    };
 			window.addEventListener("onEmbeddedMessagingReady", () => {
 			  console.log("Received the onEmbeddedMessagingReady event…");
 			  embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
