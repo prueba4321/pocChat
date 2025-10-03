@@ -8,9 +8,7 @@
 </head>
 <body>
 <script type='text/javascript'>
-	function initEmbeddedMessaging() {
-		try {
-			window.addEventListener("onEmbeddedMessagingReady", e => {
+	window.addEventListener("onEmbeddedMessagingReady", e => {
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    // List the pre-chat field names with the value and whether
 			    // it's editable in the pre-chat form.
@@ -28,6 +26,9 @@
 			    }
 			  });
 			});
+	function initEmbeddedMessaging() {
+		try {
+			
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
@@ -45,6 +46,6 @@
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola Mundo aaa</h1>
+  <h1>Hola Mundo222aaa</h1>
 </body>
 </html>
