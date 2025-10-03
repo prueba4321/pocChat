@@ -8,11 +8,22 @@
 </head>
 <body>
 <script type='text/javascript'>
+	function getUrlParams() {
+        const params = {};
+        const queryString = window.location.search.substring(1);
+        const regex = /([^&=]+)=([^&]*)/g;
+        let m;
+        while ((m = regex.exec(queryString))) {
+            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+        return params;
+    }
 	function initEmbeddedMessaging() {
 		try {
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			window.addEventListener("onEmbeddedMessagingReady", () => {
 			 console.log("Received the onEmbeddedMessagingReady event…");
+				this.getUrlParams();
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    "_lastname": {
       			"value": "Jane",
@@ -39,6 +50,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 2</h1>
+  <h1>Hola Mundo 3</h1>
 </body>
 </html>
