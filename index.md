@@ -19,8 +19,8 @@
 					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
 				}
 			);
-			embeddedservice_bootstrap.prechatAPI.onReady(() => {
-			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+			window.addEventListener("onEmbeddedMessagingReady", () => {
+			embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    // List the pre-chat field names with the value and whether
 			    // it's editable in the pre-chat form.
 			    /*"_firstName": {
@@ -53,6 +53,6 @@
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola aaaaa</h1>
+  <h1>Hola ssss</h1>
 </body>
 </html>
