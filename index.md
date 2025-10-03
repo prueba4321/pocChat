@@ -34,6 +34,14 @@
 				  "_language": {
       			"value": "Spanish",
       			"isEditableByEndUser": false
+   				 },
+				  "c__language": {
+      			"value": "Spanish",
+      			"isEditableByEndUser": false
+   				 },
+				  "language": {
+      			"value": "Spanish",
+      			"isEditableByEndUser": false
    				 }
 			  });
 			});
@@ -43,7 +51,7 @@
 				'ML_Chat_Area_Privada',
 				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
 				{
-					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com?c__language=Spanish'
+					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
 				}
 			);
 		} catch (err) {
@@ -52,6 +60,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 8</h1>
+  <h1>Hola Mundo 1</h1>
 </body>
 </html>
