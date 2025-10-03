@@ -26,7 +26,7 @@
 				const urlParams = getUrlParams();
 				console.log("urlParams: ",urlParams);
 				//embedded_svc.settings.language = urlParams['language'];
-			  const fields = embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    "_lastname": {
       			"value": "Jane",
       			"isEditableByEndUser": false
@@ -45,7 +45,6 @@
    				 }
 			  });
 			});
-			console.log(fields); // aquí tendrás _language, _lastname, etc.
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
@@ -61,6 +60,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 1</h1>
+  <h1>Hola Mundo 2</h1>
 </body>
 </html>
