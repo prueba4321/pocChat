@@ -22,16 +22,23 @@
 			window.addEventListener("onEmbeddedMessagingReady", () => {
 				console.log("⚡ Embedded Messaging Ready");
 			embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-			    // List the pre-chat field names with the value and whether
-			    // it's editable in the pre-chat form.
-			    /*"_firstName": {
-			      "value": "Jane",
-			      "isEditableByEndUser": false
-			    },
-			    "dropdown_prechat": {
-			      "value": "A2",
-			      "isEditableByEndUser": false
-			    },*/
+				"_lastname": {
+      			"value": "Jane",
+      			"isEditableByEndUser": false
+   				 },
+				  "_language": {
+      			"value": "Spanish",
+      			"isEditableByEndUser": false
+   				 },
+				  "c__language": {
+      			"value": "Spanish",
+      			"isEditableByEndUser": false
+   				 },
+				  "language": {
+      			"value": "Spanish",
+      			"isEditableByEndUser": false
+   				 }
+
 			    "language": {
 			      "value": "Spanish",
 			      "isEditableByEndUser": false
@@ -54,6 +61,6 @@
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola hghg</h1>
+  <h1>Hola hghsssg</h1>
 </body>
 </html>
