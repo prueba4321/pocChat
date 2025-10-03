@@ -19,10 +19,7 @@
 					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
 				}
 			);
-		} catch (err) {
-			console.error('Error loading Embedded Messaging: ', err);
-		}
-		window.addEventListener("onEmbeddedMessagingReady", e => {
+			embeddedservice_bootstrap.prechatAPI.onReady(() => {
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    // List the pre-chat field names with the value and whether
 			    // it's editable in the pre-chat form.
@@ -48,10 +45,14 @@
 			    }*/
 			  });
 			});
-		};
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+		
+		}
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola xx</h1>
+  <h1>Hola aaaaa</h1>
 </body>
 </html>
