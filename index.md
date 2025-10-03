@@ -26,7 +26,7 @@
 				const urlParams = getUrlParams();
 				console.log("urlParams: ",urlParams);
 				//embedded_svc.settings.language = urlParams['language'];
-			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+			  const fields = embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    "_lastname": {
       			"value": "Jane",
       			"isEditableByEndUser": false
@@ -45,6 +45,7 @@
    				 }
 			  });
 			});
+			console.log(fields); // aquí tendrás _language, _lastname, etc.
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
