@@ -55,7 +55,7 @@
 			console.log("urlParams: ",urlParams);
 			const langua=urlParams['language'];
                 const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632';
-                const urlWithParams = '${baseUrl}?language=${encodeURIComponent(langua)}';
+                const urlWithParams = `${baseUrl}?language=${encodeURIComponent(langua)}`;
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
@@ -72,6 +72,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 1</h1>
+  <h1>Hola Mundo 2</h1>
 </body>
 </html>
