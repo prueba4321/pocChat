@@ -21,7 +21,7 @@
 			      "value": "A2",
 			      "isEditableByEndUser": false
 			    },*/
-			    "_language": {
+			    "language": {
 			      "value": "_Spanish",
 			      "isEditableByEndUser": false
 			    }/*,
