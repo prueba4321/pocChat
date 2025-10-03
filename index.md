@@ -8,59 +8,30 @@
 </head>
 <body>
 <script type='text/javascript'>
-	function getUrlParams() {
-        const params = {};
-        const queryString = window.location.search.substring(1);
-        const regex = /([^&=]+)=([^&]*)/g;
-        let m;
-        while ((m = regex.exec(queryString))) {
-            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-        }
-        return params;
-    }
-        const urlParams = getUrlParams();
-		console.log("urlParams: ",urlParams);
-          localStorage.setItem("chatLanguage", urlParams['language']);
-    console.log('localStorage: ', localStorage);
 	function initEmbeddedMessaging() {
 		try {
-			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
-			window.addEventListener("onEmbeddedMessagingReady", () => {
-				// Disparamos un evento global con el language
-			    const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
-			    window.dispatchEvent(event);
-			 console.log("Received the onEmbeddedMessagingReady event…");
-				//embedded_svc.settings.language = urlParams['language'];
+			window.addEventListener("onEmbeddedMessagingReady", e => {
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-			    "_lastname": {
-      			"value": "Jane",
-      			"isEditableByEndUser": false
-   				 },
-				  "_language": {
-      			"value": "Spanish",
-      			"isEditableByEndUser": false
-   				 },
-				  "c__language": {
-      			"value": "Spanish",
-      			"isEditableByEndUser": false
-   				 },
-				  "language": {
-      			"value": "Spanish",
-      			"isEditableByEndUser": false
-   				 }
+			    // List the pre-chat field names with the value and whether
+			    // it's editable in the pre-chat form.
+			    /*"_firstName": {
+			      "value": "Jane",
+			      "isEditableByEndUser": false
+			    },
+			    "dropdown_prechat": {
+			      "value": "A2",
+			      "isEditableByEndUser": false
+			    },*/
+			    "language": {
+			      "value": "Spanish",
+			      "isEditableByEndUser": true
+			    }
 			  });
 			});
-			// Inicializar Embedded Service con el language en la URL
-			const urlParams = getUrlParams();
-			console.log("urlParams: ",urlParams);
-			const langua=urlParams['language'];
-                const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632';
-                const urlWithParams = `${baseUrl}?language=${encodeURIComponent(langua)}`;
-			//Fin de añadido
+			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
 				'ML_Chat_Area_Privada',
-				//urlWithParams,
 				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
 				{
 					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
@@ -72,6 +43,8 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 2</h1>
+
+<script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+  <h1>Hola Mundo 11</h1>
 </body>
 </html>
