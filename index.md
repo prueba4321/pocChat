@@ -18,6 +18,9 @@
         }
         return params;
     }
+	// Disparamos un evento global con el language
+    const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
+    window.dispatchEvent(event);
 	function initEmbeddedMessaging() {
 		try {
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
@@ -60,6 +63,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 2</h1>
+  <h1>Hola Mundo 4</h1>
 </body>
 </html>
