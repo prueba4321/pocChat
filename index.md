@@ -13,10 +13,10 @@
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			window.addEventListener("onEmbeddedMessagingReady", () => {
 			 console.log("Received the onEmbeddedMessagingReady event…");
-			  /*embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+			  embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
 			    "language": "Spanish",
 				"idPreChat":"aAkfZ000003eI9nSAE"
-			  });*/
+			  });
 			});
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
