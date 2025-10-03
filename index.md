@@ -9,19 +9,6 @@
 <body>
 <script type='text/javascript'>
 	function initEmbeddedMessaging() {
-		try {
-			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
-			embeddedservice_bootstrap.init(
-				'00DfZ0000004KZd',
-				'ML_Chat_Area_Privada',
-				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
-				{
-					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
-				}
-			);
-		} catch (err) {
-			console.error('Error loading Embedded Messaging: ', err);
-		}
 		window.addEventListener("onEmbeddedMessagingReady", e => {
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    // List the pre-chat field names with the value and whether
@@ -37,7 +24,7 @@
 			    "_language": {
 			      "value": "_Spanish",
 			      "isEditableByEndUser": false
-			    },
+			    }/*,
 				  "language": {
 			      "value": "Spanish",
 			      "isEditableByEndUser": false
@@ -45,13 +32,27 @@
 				  "c__language": {
 			      "value": "c__Spanish",
 			      "isEditableByEndUser": false
-			    }
+			    }*/
 			  });
 			});
+		try {
+			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+			embeddedservice_bootstrap.init(
+				'00DfZ0000004KZd',
+				'ML_Chat_Area_Privada',
+				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
+				{
+					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+		
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola ssss</h1>
+  <h1>Hola xxx</h1>
 </body>
 </html>
