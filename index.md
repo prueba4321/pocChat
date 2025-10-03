@@ -50,11 +50,17 @@
    				 }
 			  });
 			});
+			// Inicializar Embedded Service con el language en la URL
+			const urlParams = getUrlParams();
+			console.log("urlParams: ",urlParams);
+                const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632';
+                const urlWithParams = '${baseUrl}?language=${encodeURIComponent(urlParams['language'])}';
 			//Fin de añadido
 			embeddedservice_bootstrap.init(
 				'00DfZ0000004KZd',
 				'ML_Chat_Area_Privada',
-				'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
+				urlWithParams
+				//'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
 				{
 					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
 				}
@@ -65,6 +71,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 6</h1>
+  <h1>Hola Mundo 7</h1>
 </body>
 </html>
