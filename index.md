@@ -25,6 +25,7 @@
 			 console.log("Received the onEmbeddedMessagingReady event…");
 				const urlParams = getUrlParams();
 				console.log("urlParams: ",urlParams);
+				embedded_svc.settings.language = urlParams['language'];
 			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
 			    "_lastname": {
       			"value": "Jane",
@@ -51,6 +52,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 4</h1>
+  <h1>Hola Mundo 5</h1>
 </body>
 </html>
