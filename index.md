@@ -34,6 +34,10 @@
 			      "value": "A2",
 			      "isEditableByEndUser": false
 			    },*/
+				  "_firstName": {
+			      "value": "Jane",
+			      "isEditableByEndUser": false
+			    },
 			    "language": {
 			      "value": "Spanish",
 			      "isEditableByEndUser": false
