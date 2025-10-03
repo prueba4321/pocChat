@@ -9,32 +9,6 @@
 <body>
 <script type='text/javascript'>
 	function initEmbeddedMessaging() {
-		window.addEventListener("onEmbeddedMessagingReady", e => {
-			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-			    // List the pre-chat field names with the value and whether
-			    // it's editable in the pre-chat form.
-			    /*"_firstName": {
-			      "value": "Jane",
-			      "isEditableByEndUser": false
-			    },
-			    "dropdown_prechat": {
-			      "value": "A2",
-			      "isEditableByEndUser": false
-			    },*/
-			    "_language": {
-			      "value": "_Spanish",
-			      "isEditableByEndUser": false
-			    }/*,
-				  "language": {
-			      "value": "Spanish",
-			      "isEditableByEndUser": false
-			    },
-				  "c__language": {
-			      "value": "c__Spanish",
-			      "isEditableByEndUser": false
-			    }*/
-			  });
-			});
 		try {
 			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
 			embeddedservice_bootstrap.init(
@@ -48,11 +22,36 @@
 		} catch (err) {
 			console.error('Error loading Embedded Messaging: ', err);
 		}
-		
-	};
+		window.addEventListener("onEmbeddedMessagingReady", e => {
+			  embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
+			    // List the pre-chat field names with the value and whether
+			    // it's editable in the pre-chat form.
+			    /*"_firstName": {
+			      "value": "Jane",
+			      "isEditableByEndUser": false
+			    },
+			    "dropdown_prechat": {
+			      "value": "A2",
+			      "isEditableByEndUser": false
+			    },*/
+			    "language": {
+			      "value": "Spanish",
+			      "isEditableByEndUser": false
+			    }/*,
+				  "language": {
+			      "value": "Spanish",
+			      "isEditableByEndUser": false
+			    },
+				  "c__language": {
+			      "value": "c__Spanish",
+			      "isEditableByEndUser": false
+			    }*/
+			  });
+			});
+		};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <h1>Hola 776</h1>
+  <h1>Hola 7aaa6</h1>
 </body>
 </html>
