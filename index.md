@@ -31,7 +31,7 @@
                     // Pasar los parámetros al prechat usando setVisiblePrechatFields
                     embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
                         "language": {
-                            "value": languageFromUrl,
+                            "value": "Spanish",
                             "isEditableByEndUser": false
                         },
                         "_lastname": {
@@ -39,21 +39,14 @@
                             "isEditableByEndUser": false
                         },
                         "_language": {
-                            "value": languageFromUrl,
+                            "value": "Spanish",
                             "isEditableByEndUser": false
                         },
                         "c__language": {
-                            "value": languageFromUrl,
+                            "value": "Spanish",
                             "isEditableByEndUser": false
                         }
                     });
-                    // También puedes usar setPrechatFields si setVisiblePrechatFields no funciona
-                    embeddedservice_bootstrap.prechatAPI.setPrechatFields({
-                        "language": languageFromUrl,
-                        "_language": languageFromUrl,
-                        "c__language": languageFromUrl
-                    });
-                });
                 embeddedservice_bootstrap.init(
                     '00DfZ0000004KZd',
                     'ML_Chat_Area_Privada',
@@ -68,6 +61,6 @@
         };
     </script>
     <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.js' onload='initEmbeddedMessaging()'></script>
-    <h1>Hola Mundo 5</h1>
+    <h1>Hola Mundo 6</h1>
 </body>
 </html>
