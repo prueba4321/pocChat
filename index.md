@@ -8,10 +8,18 @@
 </head>
 <body>
 <script type='text/javascript'>
-	iframe.contentWindow.postMessage(
-  { language: 'Spanish', hostUrl: window.location.origin },
-  'https://endesab2c--prejun25.sandbox.my.site.com' // dominio de destino
-);
+	window.addEventListener("load", () => {
+    const iframe = document.getElementById("embeddedMessagingFrame");
+    // Envía el idioma dinámico al iframe
+    iframe.contentWindow.postMessage(
+      {
+        type: "SET_LANGUAGE",
+        language: "Spanish",
+        hostUrl: window.location.origin
+      },
+      "https://endesab2c--prejun25.sandbox.my.site.com" // dominio destino exacto
+    );
+  });
 	function getUrlParams() {
         const params = {};
         const queryString = window.location.search.substring(1);
@@ -76,6 +84,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 3</h1>
+  <h1>Hola Mundo 4</h1>
 </body>
 </html>
