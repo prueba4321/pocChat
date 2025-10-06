@@ -8,6 +8,10 @@
 </head>
 <body>
 <script type='text/javascript'>
+	iframe.contentWindow.postMessage(
+  { language: 'Spanish', hostUrl: window.location.origin },
+  'https://endesab2c--prejun25.sandbox.my.site.com' // dominio de destino
+);
 	function getUrlParams() {
         const params = {};
         const queryString = window.location.search.substring(1);
@@ -72,6 +76,6 @@
 	};
 </script>
 <script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
-  <h1>Hola Mundo 2</h1>
+  <h1>Hola Mundo 3</h1>
 </body>
 </html>
