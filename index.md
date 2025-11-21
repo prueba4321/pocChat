@@ -11,14 +11,14 @@
     window.addEventListener("load", () => {
       const iframe = document.getElementById("embeddedMessagingFrame");
       // Envía el idioma dinámico al iframe
-      if (iframe && iframe.contentWindow) {
+      if (iframe && iframe.contentWindow) { // evita error si aún no existe
         iframe.contentWindow.postMessage(
           {
             type: "SET_LANGUAGE",
             language: "Spanish",
             hostUrl: window.location.origin
           },
-          "https://endesab2c--prejun25.sandbox.my.site.com"
+          "https://endesab2c--prejun25.sandbox.my.site.com" // dominio destino exacto
         );
       }
     });
@@ -41,123 +41,94 @@
 
     function initEmbeddedMessaging() {
       try {
-        embeddedservice_bootstrap.settings.language = 'es';
-        embeddedservice_bootstrap.settings.disableReconnect = true;
+        embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+        embeddedservice_bootstrap.settings.disableReconnect = true; // evita crear nueva sesión tras finalizar
 
         window.addEventListener("onEmbeddedMessagingReady", () => {
+          // Disparamos un evento global con el language
           const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
           window.dispatchEvent(event);
           console.log("✅ onEmbeddedMessagingReady");
 
+          //embedded_svc.settings.language = urlParams['language'];
           embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-            "_lastname": { "value": "Jane", "isEditableByEndUser": false },
-            "_language": { "value": "Spanish", "isEditableByEndUser": false },
-            "c__language": { "value": "Spanish", "isEditableByEndUser": false },
-            "language": { "value": "Spanish", "isEditableByEndUser": false }
+            "_lastname": {
+              "value": "Jane",
+              "isEditableByEndUser": false
+            },
+            "_language": {
+              "value": "Spanish",
+              "isEditableByEndUser": false
+            },
+            "c__language": {
+              "value": "Spanish",
+              "isEditableByEndUser": false
+            },
+            "language": {
+              "value": "Spanish",
+              "isEditableByEndUser": false
+            }
           });
 
-          // === BLOQUE DE DEPURACIÓN ===
-          (function () {
-            function disableComposerUI() {
-              console.log("🧱 Deshabilitando composer...");
-              const root = document.querySelector('[id^="embeddedMessaging"]') || document;
-              const composer = root.querySelector('textarea, input[type="text"], [contenteditable="true"]');
-              if (composer) {
-                composer.setAttribute('disabled', 'true');
-                composer.style.pointerEvents = 'none';
-                composer.style.opacity = '0.5';
-              }
-              const sendBtn = root.querySelector('button');
-              if (sendBtn) {
-                sendBtn.setAttribute('disabled', 'true');
-                sendBtn.style.pointerEvents = 'none';
-                sendBtn.style.opacity = '0.5';
-              }
+          // === Manejo de cierre: parseo del entryPayload + acciones finales ===
+          window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', async (evt) => {
+            const d = evt?.detail || evt;
+            // Log completo para depurar
+            console.log("📡 onEmbeddedMessagingSessionStatusUpdate (raw):", d);
+
+            // El estado real viene en entryPayload como JSON string:
+            const payloadRaw = d?.conversationEntry?.entryPayload;
+            let payload = null;
+            try {
+              payload = payloadRaw ? JSON.parse(payloadRaw) : null;
+            } catch (e) {
+              console.warn("⚠️ No se pudo parsear entryPayload:", payloadRaw, e);
             }
 
-            async function hardEndSessionAndRemove() {
-              console.log("🧹 Ejecutando hardEndSessionAndRemove()");
+            const status =
+              payload?.sessionStatus || d?.status || d?.sessionStatus || 'Unknown';
+
+            console.log("🧭 SessionStatus detectado:", status,
+              "| EndedBy:", payload?.sessionEndedByRole || 'N/A');
+
+            if (status === 'Ended') {
+              console.log("🏁 Sesión finalizada: ejecutando cleanup (clearSession + remove iframe)");
               try {
                 if (embeddedservice_bootstrap?.userVerificationAPI?.clearSession) {
-                  console.log("🧾 Llamando clearSession(true)");
+                  console.log("🧾 Llamando clearSession(true)...");
                   await embeddedservice_bootstrap.userVerificationAPI.clearSession(true);
                 }
-                if (embeddedservice_bootstrap?.utilAPI?.removeAllComponents) {
-                  console.log("🧾 Llamando removeAllComponents()");
-                  embeddedservice_bootstrap.utilAPI.removeAllComponents();
-                } else {
-                  console.log("🧾 Ocultando contenedor manualmente");
-                  const container = document.getElementById('embeddedMessagingFrame')?.closest('div');
-                  if (container) container.style.display = 'none';
-                }
               } catch (e) {
-                console.error('❌ Error al limpiar sesión de Messaging:', e);
+                console.error("❌ Error en clearSession:", e);
               }
-            }
 
-            try {
-              const api = embeddedservice_bootstrap?.messagingAPI;
-              if (api?.assignMessagingEventHandler && api?.MESSAGING_EVENT) {
-                console.log("🎯 messagingAPI detectada. Registrando handlers...");
-
-                const stopInput = (evt) => {
-                  console.log("⚡ Evento detectado:", evt?.type || 'custom');
-                  disableComposerUI();
-                  hardEndSessionAndRemove();
-                };
-
-                if (api.MESSAGING_EVENT.PARTICIPANT_LEFT) {
-                  api.assignMessagingEventHandler(api.MESSAGING_EVENT.PARTICIPANT_LEFT, (e) => {
-                    console.log("👋 PARTICIPANT_LEFT detectado:", e);
-                    stopInput(e);
-                  });
-                }
-
-                if (api.MESSAGING_EVENT.CONVERSATION_ENDED) {
-                  api.assignMessagingEventHandler(api.MESSAGING_EVENT.CONVERSATION_ENDED, (e) => {
-                    console.log("🏁 CONVERSATION_ENDED detectado:", e);
-                    stopInput(e);
-                  });
-                }
+              // Bloqueo inmediato: quitar el iframe del DOM (cross-origin safe)
+              const frame = document.getElementById('embeddedMessagingFrame');
+              if (frame) {
+                console.log("🗑️ Eliminando iframe embeddedMessagingFrame del DOM");
+                frame.remove(); // si prefieres ocultar: frame.style.display='none';
               } else {
-                console.warn("⚠️ messagingAPI no encontrada, usando fallback...");
-                window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', (evt) => {
-                  const d = evt?.detail || evt;
-                  console.log("📡 onEmbeddedMessagingSessionStatusUpdate:", d);
-                  if (d && (d.status === 'Ended' || d.sessionStatus === 'Ended')) {
-                    disableComposerUI();
-                    hardEndSessionAndRemove();
-                  }
-                });
+                console.log("ℹ️ No se encontró embeddedMessagingFrame; oculto contenedor raíz si existe");
+                const container = document.querySelector('[id^="embeddedMessaging"]')?.closest('div');
+                if (container) container.style.display = 'none';
               }
-            } catch (e) {
-              console.error('❌ No pude enganchar handlers de Messaging:', e);
             }
-
-            // Observador visual de respaldo
-            const obs = new MutationObserver(() => {
-              const ended = Array.from(document.querySelectorAll('[id^="embeddedMessaging"]'))
-                .some(n => /finalizad[oa]|ended|conversation\s+closed/i.test(n.textContent || ''));
-              if (ended) {
-                console.log("👀 Texto de finalización detectado en el DOM.");
-                disableComposerUI();
-              }
-            });
-            obs.observe(document.body, { subtree: true, childList: true, characterData: true });
-          })();
-          // === FIN BLOQUE DE DEPURACIÓN ===
+          });
+          // === FIN manejo de cierre ===
         });
 
+        // Inicializar Embedded Service con el language en la URL
         const urlParams = getUrlParams();
         console.log("urlParams: ", urlParams);
         const langua = urlParams['language'];
         const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632';
         const urlWithParams = `${baseUrl}?language=${encodeURIComponent(langua)}`;
+        //Fin de añadido
 
         embeddedservice_bootstrap.init(
           '00DfZ0000004KZd',
           'ML_Chat_Area_Privada',
-          // urlWithParams,
+          //urlWithParams,
           'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
           {
             scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
