@@ -41,101 +41,94 @@
 
     function initEmbeddedMessaging() {
       try {
-        embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+        embeddedservice_bootstrap.settings.language = 'es';
         embeddedservice_bootstrap.settings.disableReconnect = true; // evita crear nueva sesión tras finalizar
 
-        // ===== Overlay que SOLO cubre el iframe del chat =====
-        let chatOverlay = null;
-        let repositionFns = [];
+        // ===== Overlay que SOLO cubre el COMPOSER (parte inferior del iframe) =====
+        let composerOverlay = null;
+        let detachFns = [];
 
-        function positionOverlayOverIframe(overlay, iframeEl) {
+        // Ajusta estos límites si tu composer es más alto/bajo
+        const MIN_H = 90;   // px
+        const MAX_H = 220;  // px
+        const FRACTION = 0.22; // 22% de la altura del iframe
+
+        function positionOverlayOnComposer(overlay, iframeEl) {
           const rect = iframeEl.getBoundingClientRect();
+          const composerHeight = Math.max(MIN_H, Math.min(MAX_H, Math.floor(rect.height * FRACTION)));
+
           overlay.style.position = 'fixed';
           overlay.style.left = rect.left + 'px';
-          overlay.style.top = rect.top + 'px';
           overlay.style.width = rect.width + 'px';
-          overlay.style.height = rect.height + 'px';
+          overlay.style.height = composerHeight + 'px';
+          overlay.style.top = (rect.bottom - composerHeight) + 'px';
+
           overlay.style.zIndex = '2147483647'; // sobre el iframe
-          overlay.style.pointerEvents = 'auto'; // captura clicks
-          overlay.style.background = 'rgba(0,0,0,0.28)';
-          overlay.style.backdropFilter = 'blur(1px)';
-          overlay.style.display = 'flex';
-          overlay.style.alignItems = 'center';
-          overlay.style.justifyContent = 'center';
+          overlay.style.pointerEvents = 'auto'; // captura clicks/teclado SOLO en esa franja
+          overlay.style.background = 'linear-gradient(to top, rgba(0,0,0,0.28), rgba(0,0,0,0.00))';
           overlay.style.userSelect = 'none';
+          overlay.style.display = 'flex';
+          overlay.style.alignItems = 'flex-end';
+          overlay.style.justifyContent = 'center';
+          overlay.style.padding = '10px';
         }
 
-        function addChatEndedOverlay(texto = 'La conversación ha finalizado.') {
-          if (chatOverlay) return;
+        function addComposerOverlay(texto = 'La conversación ha finalizado.') {
+          if (composerOverlay) return;
           const iframe = document.getElementById('embeddedMessagingFrame');
           if (!iframe) { console.warn('Overlay: no se encontró embeddedMessagingFrame'); return; }
 
           const overlay = document.createElement('div');
-          overlay.id = 'chat-ended-overlay';
-          const card = document.createElement('div');
-          card.style.background = '#fff';
-          card.style.padding = '10px 14px';
-          card.style.borderRadius = '10px';
-          card.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)';
-          card.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
-          card.style.fontSize = '13px';
-          card.style.color = '#111';
-          card.style.textAlign = 'center';
-          card.textContent = texto;
-          overlay.appendChild(card);
+          overlay.id = 'chat-composer-overlay';
 
-          // Coloca y escucha resize/scroll para mantenerlo exactamente sobre el iframe
-          positionOverlayOverIframe(overlay, iframe);
-          const onResize = () => positionOverlayOverIframe(overlay, iframe);
-          const onScroll = () => positionOverlayOverIframe(overlay, iframe);
+          const chip = document.createElement('div');
+          chip.textContent = texto;
+          chip.style.background = '#fff';
+          chip.style.padding = '8px 12px';
+          chip.style.borderRadius = '999px';
+          chip.style.boxShadow = '0 4px 14px rgba(0,0,0,0.15)';
+          chip.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+          chip.style.fontSize = '12px';
+          chip.style.color = '#111';
+          chip.style.marginBottom = '8px';
+          overlay.appendChild(chip);
+
+          positionOverlayOnComposer(overlay, iframe);
+
+          const onResize = () => positionOverlayOnComposer(overlay, iframe);
+          const onScroll = () => positionOverlayOnComposer(overlay, iframe);
           window.addEventListener('resize', onResize);
-          window.addEventListener('scroll', onScroll, true); // true: captura scrolls internos
-          repositionFns = [() => window.removeEventListener('resize', onResize),
-                           () => window.removeEventListener('scroll', onScroll, true)];
+          window.addEventListener('scroll', onScroll, true);
+          detachFns = [() => window.removeEventListener('resize', onResize),
+                       () => window.removeEventListener('scroll', onScroll, true)];
 
           document.body.appendChild(overlay);
-          chatOverlay = overlay;
-          console.log('🛡️ Overlay activado SOLO sobre el chat.');
+          composerOverlay = overlay;
+          console.log('🛡️ Overlay del COMPOSER activado.');
         }
 
-        function removeChatEndedOverlay() {
-          if (chatOverlay) {
-            repositionFns.forEach(fn => fn());
-            repositionFns = [];
-            chatOverlay.remove();
-            chatOverlay = null;
-            console.log('🧽 Overlay retirado.');
+        function removeComposerOverlay() {
+          if (composerOverlay) {
+            detachFns.forEach(fn => fn());
+            detachFns = [];
+            composerOverlay.remove();
+            composerOverlay = null;
+            console.log('🧽 Overlay del COMPOSER retirado.');
           }
         }
-        // ===== FIN overlay =====
+        // ===== FIN overlay de composer =====
 
         window.addEventListener("onEmbeddedMessagingReady", () => {
-          // Disparamos un evento global con el language
-          const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
-          window.dispatchEvent(event);
           console.log("✅ onEmbeddedMessagingReady");
 
-          //embedded_svc.settings.language = urlParams['language'];
           embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-            "_lastname": {
-              "value": "Jane",
-              "isEditableByEndUser": false
-            },
-            "_language": {
-              "value": "Spanish",
-              "isEditableByEndUser": false
-            },
-            "c__language": {
-              "value": "Spanish",
-              "isEditableByEndUser": false
-            },
-            "language": {
-              "value": "Spanish",
-              "isEditableByEndUser": false
-            }
+            "_lastname": { "value": "Jane", "isEditableByEndUser": false },
+            "_language": { "value": "Spanish", "isEditableByEndUser": false },
+            "c__language": { "value": "Spanish", "isEditableByEndUser": false },
+            "language": { "value": "Spanish", "isEditableByEndUser": false }
           });
 
-          // Detecta el fin de sesión y bloquea SOLO el chat (sin cerrarlo ni tocar la página)
+          // Detecta el fin de sesión y bloquea SOLO el composer (sin cerrar ni ocultar el chat)
           window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', (evt) => {
             const d = evt?.detail || evt;
             console.log("📡 onEmbeddedMessagingSessionStatusUpdate (raw):", d);
@@ -152,11 +145,10 @@
             console.log("🧭 SessionStatus detectado:", status, "| EndedBy:", payload?.sessionEndedByRole || 'N/A');
 
             if (status === 'Ended') {
-              console.log("🏁 Sesión finalizada: BLOQUEO de interacción SOLO en el iframe.");
-              // OJO: no llamamos a clearSession para no afectar visibilidad del widget
-              addChatEndedOverlay('La conversación ha finalizado.');
+              console.log("🏁 Sesión finalizada: BLOQUEO del composer activado.");
+              addComposerOverlay('La conversación ha finalizado.');
             } else if (status === 'Active' || status === 'Waiting') {
-              removeChatEndedOverlay();
+              removeComposerOverlay();
             }
           });
         });
