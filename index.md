@@ -48,7 +48,7 @@
           // Disparamos un evento global con el language
           const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
           window.dispatchEvent(event);
-          console.log("✅ onEmbeddedMessagingReady");
+          console.log("✅ onEmbeddedMessagingReady 1");
 
           //embedded_svc.settings.language = urlParams['language'];
           embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
