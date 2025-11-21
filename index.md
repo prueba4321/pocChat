@@ -44,11 +44,83 @@
         embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
         embeddedservice_bootstrap.settings.disableReconnect = true; // evita crear nueva sesión tras finalizar
 
+        // --- Utilidades de UI: overlay para bloquear interacción y CSS para mantener visible el chat ---
+        function ensureChatVisibleStyles() {
+          if (document.getElementById('force-chat-visible')) return;
+          const style = document.createElement('style');
+          style.id = 'force-chat-visible';
+          style.textContent = `
+            #embeddedMessagingFrame,
+            [id^="embeddedMessaging"] {
+              display: block !important;
+              visibility: visible !important;
+              opacity: 1 !important;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+
+        function addChatEndedOverlay(texto = 'La conversación ha finalizado.') {
+          // No duplicar
+          if (document.getElementById('chat-ended-overlay')) return;
+
+          // Asegura que el chat no se oculte por estilos del SDK
+          ensureChatVisibleStyles();
+
+          const iframe = document.getElementById('embeddedMessagingFrame');
+          if (!iframe) {
+            console.warn('Overlay: no se encontró el iframe embeddedMessagingFrame');
+            return;
+          }
+          let wrapper = iframe.parentElement;
+          if (getComputedStyle(wrapper).position === 'static') {
+            wrapper.style.position = 'relative';
+          }
+
+          const overlay = document.createElement('div');
+          overlay.id = 'chat-ended-overlay';
+          overlay.setAttribute('role', 'note');
+          overlay.style.position = 'absolute';
+          overlay.style.inset = '0';
+          overlay.style.display = 'flex';
+          overlay.style.alignItems = 'center';
+          overlay.style.justifyContent = 'center';
+          overlay.style.background = 'rgba(0,0,0,0.3)';
+          overlay.style.backdropFilter = 'blur(2px)';
+          overlay.style.pointerEvents = 'auto';       // bloquea clicks al iframe
+          overlay.style.zIndex = '2147483647';
+          overlay.style.userSelect = 'none';
+
+          const mensaje = document.createElement('div');
+          mensaje.style.background = '#fff';
+          mensaje.style.padding = '12px 20px';
+          mensaje.style.borderRadius = '10px';
+          mensaje.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+          mensaje.style.fontFamily = 'system-ui, sans-serif';
+          mensaje.style.textAlign = 'center';
+          mensaje.style.fontSize = '13px';
+          mensaje.style.color = '#333';
+          mensaje.textContent = texto;
+
+          overlay.appendChild(mensaje);
+          wrapper.appendChild(overlay);
+          console.log('🛡️ Overlay añadido: bloqueando interacción sin cerrar ventana.');
+        }
+
+        function removeChatEndedOverlay() {
+          const overlay = document.getElementById('chat-ended-overlay');
+          if (overlay) {
+            overlay.remove();
+            console.log('🧽 Overlay retirado.');
+          }
+        }
+        // --- Fin utilidades UI ---
+
         window.addEventListener("onEmbeddedMessagingReady", () => {
           // Disparamos un evento global con el language
           const event = new CustomEvent('externalLanguage', { detail: { language: 'Spanish' } });
           window.dispatchEvent(event);
-          console.log("✅ onEmbeddedMessagingReady 1");
+          console.log("✅ onEmbeddedMessagingReady");
 
           //embedded_svc.settings.language = urlParams['language'];
           embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
@@ -70,13 +142,11 @@
             }
           });
 
-          // === Manejo de cierre: parseo del entryPayload + acciones finales ===
-          window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', async (evt) => {
+          // === Manejo de cierre: parseo del entryPayload + bloqueo de interacción (sin cerrar chat) ===
+          window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', (evt) => {
             const d = evt?.detail || evt;
-            // Log completo para depurar
             console.log("📡 onEmbeddedMessagingSessionStatusUpdate (raw):", d);
 
-            // El estado real viene en entryPayload como JSON string:
             const payloadRaw = d?.conversationEntry?.entryPayload;
             let payload = null;
             try {
@@ -85,23 +155,16 @@
               console.warn("⚠️ No se pudo parsear entryPayload:", payloadRaw, e);
             }
 
-            const status =
-              payload?.sessionStatus || d?.status || d?.sessionStatus || 'Unknown';
-
-            console.log("🧭 SessionStatus detectado:", status,
-              "| EndedBy:", payload?.sessionEndedByRole || 'N/A');
+            const status = payload?.sessionStatus || d?.status || d?.sessionStatus || 'Unknown';
+            console.log("🧭 SessionStatus detectado:", status, "| EndedBy:", payload?.sessionEndedByRole || 'N/A');
 
             if (status === 'Ended') {
-              console.log("🏁 Sesión finalizada: ejecutando cleanup (clearSession + remove iframe)");
-              try {
-                if (embeddedservice_bootstrap?.userVerificationAPI?.clearSession) {
-                  console.log("🧾 Llamando clearSession(true)...");
-                  await embeddedservice_bootstrap.userVerificationAPI.clearSession(true);
-                }
-              } catch (e) {
-                console.error("❌ Error en clearSession:", e);
-              }
-
+              console.log("🏁 Sesión finalizada: BLOQUEO activado (sin cerrar ventana).");
+              // Importante: NO llamar a clearSession ni removeAllComponents aquí
+              addChatEndedOverlay('La conversación ha finalizado.');
+            } else if (status === 'Active' || status === 'Waiting') {
+              // Si vuelve a iniciar una conversación válida, retirar el overlay
+              removeChatEndedOverlay();
             }
           });
           // === FIN manejo de cierre ===
