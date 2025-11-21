@@ -44,77 +44,70 @@
         embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
         embeddedservice_bootstrap.settings.disableReconnect = true; // evita crear nueva sesión tras finalizar
 
-        // --- Utilidades de UI: overlay para bloquear interacción y CSS para mantener visible el chat ---
-        function ensureChatVisibleStyles() {
-          if (document.getElementById('force-chat-visible')) return;
-          const style = document.createElement('style');
-          style.id = 'force-chat-visible';
-          style.textContent = `
-            #embeddedMessagingFrame,
-            [id^="embeddedMessaging"] {
-              display: block !important;
-              visibility: visible !important;
-              opacity: 1 !important;
-            }
-          `;
-          document.head.appendChild(style);
-        }
+        // ===== Overlay que SOLO cubre el iframe del chat =====
+        let chatOverlay = null;
+        let repositionFns = [];
 
-        function addChatEndedOverlay(texto = 'La conversación ha finalizado.') {
-          // No duplicar
-          if (document.getElementById('chat-ended-overlay')) return;
-
-          // Asegura que el chat no se oculte por estilos del SDK
-          ensureChatVisibleStyles();
-
-          const iframe = document.getElementById('embeddedMessagingFrame');
-          if (!iframe) {
-            console.warn('Overlay: no se encontró el iframe embeddedMessagingFrame');
-            return;
-          }
-          let wrapper = iframe.parentElement;
-          if (getComputedStyle(wrapper).position === 'static') {
-            wrapper.style.position = 'relative';
-          }
-
-          const overlay = document.createElement('div');
-          overlay.id = 'chat-ended-overlay';
-          overlay.setAttribute('role', 'note');
-          overlay.style.position = 'absolute';
-          overlay.style.inset = '0';
+        function positionOverlayOverIframe(overlay, iframeEl) {
+          const rect = iframeEl.getBoundingClientRect();
+          overlay.style.position = 'fixed';
+          overlay.style.left = rect.left + 'px';
+          overlay.style.top = rect.top + 'px';
+          overlay.style.width = rect.width + 'px';
+          overlay.style.height = rect.height + 'px';
+          overlay.style.zIndex = '2147483647'; // sobre el iframe
+          overlay.style.pointerEvents = 'auto'; // captura clicks
+          overlay.style.background = 'rgba(0,0,0,0.28)';
+          overlay.style.backdropFilter = 'blur(1px)';
           overlay.style.display = 'flex';
           overlay.style.alignItems = 'center';
           overlay.style.justifyContent = 'center';
-          overlay.style.background = 'rgba(0,0,0,0.3)';
-          overlay.style.backdropFilter = 'blur(2px)';
-          overlay.style.pointerEvents = 'auto';       // bloquea clicks al iframe
-          overlay.style.zIndex = '2147483647';
           overlay.style.userSelect = 'none';
+        }
 
-          const mensaje = document.createElement('div');
-          mensaje.style.background = '#fff';
-          mensaje.style.padding = '12px 20px';
-          mensaje.style.borderRadius = '10px';
-          mensaje.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-          mensaje.style.fontFamily = 'system-ui, sans-serif';
-          mensaje.style.textAlign = 'center';
-          mensaje.style.fontSize = '13px';
-          mensaje.style.color = '#333';
-          mensaje.textContent = texto;
+        function addChatEndedOverlay(texto = 'La conversación ha finalizado.') {
+          if (chatOverlay) return;
+          const iframe = document.getElementById('embeddedMessagingFrame');
+          if (!iframe) { console.warn('Overlay: no se encontró embeddedMessagingFrame'); return; }
 
-          overlay.appendChild(mensaje);
-          wrapper.appendChild(overlay);
-          console.log('🛡️ Overlay añadido: bloqueando interacción sin cerrar ventana.');
+          const overlay = document.createElement('div');
+          overlay.id = 'chat-ended-overlay';
+          const card = document.createElement('div');
+          card.style.background = '#fff';
+          card.style.padding = '10px 14px';
+          card.style.borderRadius = '10px';
+          card.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)';
+          card.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif';
+          card.style.fontSize = '13px';
+          card.style.color = '#111';
+          card.style.textAlign = 'center';
+          card.textContent = texto;
+          overlay.appendChild(card);
+
+          // Coloca y escucha resize/scroll para mantenerlo exactamente sobre el iframe
+          positionOverlayOverIframe(overlay, iframe);
+          const onResize = () => positionOverlayOverIframe(overlay, iframe);
+          const onScroll = () => positionOverlayOverIframe(overlay, iframe);
+          window.addEventListener('resize', onResize);
+          window.addEventListener('scroll', onScroll, true); // true: captura scrolls internos
+          repositionFns = [() => window.removeEventListener('resize', onResize),
+                           () => window.removeEventListener('scroll', onScroll, true)];
+
+          document.body.appendChild(overlay);
+          chatOverlay = overlay;
+          console.log('🛡️ Overlay activado SOLO sobre el chat.');
         }
 
         function removeChatEndedOverlay() {
-          const overlay = document.getElementById('chat-ended-overlay');
-          if (overlay) {
-            overlay.remove();
+          if (chatOverlay) {
+            repositionFns.forEach(fn => fn());
+            repositionFns = [];
+            chatOverlay.remove();
+            chatOverlay = null;
             console.log('🧽 Overlay retirado.');
           }
         }
-        // --- Fin utilidades UI ---
+        // ===== FIN overlay =====
 
         window.addEventListener("onEmbeddedMessagingReady", () => {
           // Disparamos un evento global con el language
@@ -142,7 +135,7 @@
             }
           });
 
-          // === Manejo de cierre: parseo del entryPayload + bloqueo de interacción (sin cerrar chat) ===
+          // Detecta el fin de sesión y bloquea SOLO el chat (sin cerrarlo ni tocar la página)
           window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', (evt) => {
             const d = evt?.detail || evt;
             console.log("📡 onEmbeddedMessagingSessionStatusUpdate (raw):", d);
@@ -159,15 +152,13 @@
             console.log("🧭 SessionStatus detectado:", status, "| EndedBy:", payload?.sessionEndedByRole || 'N/A');
 
             if (status === 'Ended') {
-              console.log("🏁 Sesión finalizada: BLOQUEO activado (sin cerrar ventana).");
-              // Importante: NO llamar a clearSession ni removeAllComponents aquí
+              console.log("🏁 Sesión finalizada: BLOQUEO de interacción SOLO en el iframe.");
+              // OJO: no llamamos a clearSession para no afectar visibilidad del widget
               addChatEndedOverlay('La conversación ha finalizado.');
             } else if (status === 'Active' || status === 'Waiting') {
-              // Si vuelve a iniciar una conversación válida, retirar el overlay
               removeChatEndedOverlay();
             }
           });
-          // === FIN manejo de cierre ===
         });
 
         // Inicializar Embedded Service con el language en la URL
