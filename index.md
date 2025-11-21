@@ -102,16 +102,6 @@
                 console.error("❌ Error en clearSession:", e);
               }
 
-              // Bloqueo inmediato: quitar el iframe del DOM (cross-origin safe)
-              /*const frame = document.getElementById('embeddedMessagingFrame');
-              if (frame) {
-                console.log("🗑️ Eliminando iframe embeddedMessagingFrame del DOM");
-                frame.remove(); // si prefieres ocultar: frame.style.display='none';
-              } else {
-                console.log("ℹ️ No se encontró embeddedMessagingFrame; oculto contenedor raíz si existe");
-                const container = document.querySelector('[id^="embeddedMessaging"]')?.closest('div');
-                if (container) container.style.display = 'none';
-              }*/
             }
           });
           // === FIN manejo de cierre ===
