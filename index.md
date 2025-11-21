@@ -8,6 +8,33 @@
 </head>
 <body>
 <script type='text/javascript'>
+  // NUEVO: bloquear entrada y desmontar el widget cuando la sesión termine
+  // Recomendado por Salesforce: escuchar eventos del cliente y usar clearSession + removeAllComponents
+  // Docs: eventos del cliente y estados de sesión; utilAPI/userVerificationAPI.
+  window.addEventListener('onEmbeddedMessagingSessionStatusUpdate', async (evt) => {
+    try {
+      // Algunas versiones envían el payload en evt.detail, otras como primer argumento
+      const detail = evt && (evt.detail || evt);
+      // Cuando el estado del Messaging Session cambia a "Ended"
+      if (detail && (detail.status === 'Ended' || detail.sessionStatus === 'Ended')) {
+        // 1) Limpiar completamente la sesión (auth + datos + historial en memoria)
+        if (embeddedservice_bootstrap?.userVerificationAPI?.clearSession) {
+          await embeddedservice_bootstrap.userVerificationAPI.clearSession(true);
+        }
+        // 2) Quitar todos los componentes del DOM (desmonta el input, botón, etc.)
+        if (embeddedservice_bootstrap?.utilAPI?.removeAllComponents) {
+          embeddedservice_bootstrap.utilAPI.removeAllComponents();
+        }
+
+        // (Opcional) mostrar un aviso propio donde estaba el chat
+        // const banner = document.createElement('div');
+        // banner.textContent = 'La conversación ha finalizado.';
+        // document.body.appendChild(banner);
+      }
+    } catch (e) {
+      console.error('Error al finalizar sesión de Messaging:', e);
+    }
+  });
 	window.addEventListener("load", () => {
     const iframe = document.getElementById("embeddedMessagingFrame");
     // Envía el idioma dinámico al iframe
