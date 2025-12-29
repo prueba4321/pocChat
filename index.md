@@ -39,7 +39,7 @@ iframe.embeddedMessagingFrame {
       embeddedservice_bootstrap.settings.hideChatButtonOnLoad = false; // o true si lo ocultas
       embeddedservice_bootstrap.init(
         "00DfZ0000004KZd",
-        "Chat_Area_Abierta",
+        "ML_Chat_Area_Privada",
         "https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632",
         { scrt2URL: "https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com" }
       );
