@@ -178,7 +178,7 @@
 
   <script
     type='text/javascript'
-    src='https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632/assets/js/bootstrap.min.js'
+    src='https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183/assets/js/bootstrap.min.js'
     onload='initEmbeddedMessaging()'>
   </script>
 
