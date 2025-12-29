@@ -157,15 +157,15 @@
         const urlParams = getUrlParams();
         console.log("urlParams: ", urlParams);
         const langua = urlParams['language'];
-        const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632';
+        const baseUrl = 'https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183';
         const urlWithParams = `${baseUrl}?language=${encodeURIComponent(langua)}`;
         //Fin de añadido
 
         embeddedservice_bootstrap.init(
           '00DfZ0000004KZd',
-          'ML_Chat_Area_Privada',
+          'Chat_Area_Abierta',
           //urlWithParams,
-          'https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632',
+          'https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183',
           {
             scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
           }
