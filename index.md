@@ -40,7 +40,7 @@ iframe.embeddedMessagingFrame {
       embeddedservice_bootstrap.init(
         "00DfZ0000004KZd",
         "Chat_Area_Abierta",
-        "https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183",
+        "https://endesab2c--prejun25.sandbox.my.site.com/ESWMLChatAreaPrivada1757594052632",
         { scrt2URL: "https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com" }
       );
       console.log("✅ init() ejecutado");
