@@ -1,7 +1,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 iframe.embeddedMessagingFrame {
             position: fixed !important; /* Para que se quede sobre todo */
@@ -32,25 +32,39 @@ iframe.embeddedMessagingFrame {
     console.log("✅ onEmbeddedMessagingReady fired");
   });
 </script>
-<script type='text/javascript'>
-	function initEmbeddedMessaging() {
-		try {
-			embeddedservice_bootstrap.settings.language = 'es'; // For example, enter 'en' or 'en-US'
+<script>
+  function initEmbeddedMessaging() {
+    try {
+      embeddedservice_bootstrap.settings.language = "es";
+      embeddedservice_bootstrap.settings.hideChatButtonOnLoad = false; // o true si lo ocultas
+      embeddedservice_bootstrap.init(
+        "00DfZ0000004KZd",
+        "Chat_Area_Abierta",
+        "https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183",
+        { scrt2URL: "https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com" }
+      );
+      console.log("✅ init() ejecutado");
+    } catch (e) {
+      console.error("❌ Error initEmbeddedMessaging:", e);
+    }
+  }
 
-			embeddedservice_bootstrap.init(
-				'00DfZ0000004KZd',
-				'Chat_Area_Abierta',
-				'https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183',
-				{
-					scrt2URL: 'https://endesab2c--prejun25.sandbox.my.salesforce-scrt.com'
-				}
-			);
-		} catch (err) {
-			console.error('Error loading Embedded Messaging: ', err);
-		}
-	};
+  window.addEventListener("onEmbeddedMessagingReady", () => {
+    console.log("✅ onEmbeddedMessagingReady fired");
+  });
+
+  window.addEventListener("onEmbeddedMessagingButtonCreated", () => {
+    console.log("✅ onEmbeddedMessagingButtonCreated fired -> launchChat()");
+    embeddedservice_bootstrap.utilAPI.launchChat()
+      .then(() => console.log("✅ launchChat OK"))
+      .catch(e => console.error("❌ launchChat error", e));
+  });
 </script>
-<script type='text/javascript' src='https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+<script
+  type="text/javascript"
+  src="https://endesab2c--prejun25.sandbox.my.site.com/ESWChatAreaAbierta1766997065183/assets/js/bootstrap.min.js"
+  onload="initEmbeddedMessaging()">
+</script>
 
 </body>
 </html>
